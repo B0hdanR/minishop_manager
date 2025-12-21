@@ -31,9 +31,9 @@
               </svg>
             </div>
             <div class="description ps-5">
-              <h5 class="text-white">{{ dish.name }}</h5>
-              <p class="text-white">{{ dish.description|default:"Description missing." }}</p>
-              <a href="{% url 'kitchen:dish-detail' dish.id %}" class="text-dark icon-move-right">
+              <h5 class="text-white">{{ product.name }}</h5>
+              <p class="text-white">{{ product.description|default:"Description missing." }}</p>
+              <a href="{% url 'shop:product-detail' dish.id %}" class="text-dark icon-move-right">
                 View details
                 <i class="fas fa-arrow-right text-sm ms-1"></i>
               </a>

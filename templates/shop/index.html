@@ -51,29 +51,29 @@
           <div class="row">
             <div class="col-md-3 position-relative">
               <div class="p-3 text-center">
-                <h1 class="text-gradient text-primary"><span id="state1" countTo="{{ num_ingredients }}">0</span>+</h1>
-                <h5 class="mt-3">Ingredients</h5>
+                <h1 class="text-gradient text-primary"><span id="state1" countTo="{{ num_categories }}">0</span>+</h1>
+                <h5 class="mt-3">Categories</h5>
               </div>
               <hr class="vertical dark">
             </div>
             <div class="col-md-3 position-relative">
               <div class="p-3 text-center">
-                <h1 class="text-gradient text-primary"> <span id="state2" countTo="{{ num_dishes }}">0</span>+</h1>
-                <h5 class="mt-3">Dishes</h5>
+                <h1 class="text-gradient text-primary"> <span id="state2" countTo="{{ num_products }}">0</span>+</h1>
+                <h5 class="mt-3">Products</h5>
               </div>
               <hr class="vertical dark">
             </div>
             <div class="col-md-3 position-relative">
               <div class="p-3 text-center">
-                <h1 class="text-gradient text-primary"><span id="state3" countTo="{{ num_cooks }}">0</span>+</h1>
-                <h5 class="mt-3">Cooks</h5>
+                <h1 class="text-gradient text-primary"><span id="state3" countTo="{{ num_users }}">0</span>+</h1>
+                <h5 class="mt-3">Users</h5>
               </div>
               <hr class="vertical dark">
             </div>
             <div class="col-md-3 position-relative">
               <div class="p-3 text-center">
-                <h1 class="text-gradient text-primary"><span id="state4" countTo="{{ num_dish_types }}">0</span>+</h1>
-                <h5 class="mt-3">Types of dishes</h5>
+                <h1 class="text-gradient text-primary"><span id="state4" countTo="{{ num_orders }}">0</span>+</h1>
+                <h5 class="mt-3">Orders</h5>
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@
                 </svg>
               </div>
               <h2 class="text-white up mb-0">Restaurant <br /> Kitchen</h2>
-              <a href="{% url 'kitchen:dish-list' %}" class="btn btn-outline-white mt-5 up btn-round">Start with the dishes</a>
+              <a href="{% url 'shop:product-list' %}" class="btn btn-outline-white mt-5 up btn-round">Start with the dishes</a>
             </div>
           </div>
         </div>

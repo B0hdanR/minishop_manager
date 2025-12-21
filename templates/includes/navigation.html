@@ -44,17 +44,17 @@
                         </div>
                         Landing Pages
                       </h6>
-                      <a href="{% url 'kitchen:ingredient-list' %}" class="dropdown-item border-radius-md">
-                        Ingredients
+                      <a href="{% url 'shop:category-list' %}" class="dropdown-item border-radius-md">
+                        Categories
                       </a>
-                      <a href="{% url 'kitchen:dish-list' %}" class="dropdown-item border-radius-md">
-                        Dishes
+                      <a href="{% url 'shop:product-list' %}" class="dropdown-item border-radius-md">
+                        Products
                       </a>
-                      <a href="{% url 'kitchen:cook-list' %}" class="dropdown-item border-radius-md">
-                        Cooks
+                      <a href="{% url 'shop:user-list' %}" class="dropdown-item border-radius-md">
+                        Users
                       </a>
-                      <a href="{% url 'kitchen:dish-type-list' %}" class="dropdown-item border-radius-md">
-                        Dish Types
+                      <a href="{% url 'shop:order-list' %}" class="dropdown-item border-radius-md">
+                        Orders
                       </a>
                       <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0 mt-3">
                         <div class="d-inline-block">
@@ -76,10 +76,10 @@
                         </div>
                         Account
                       </h6>
-                      <a href="{% url "login" %}" class="dropdown-item border-radius-md">
+                      <a href="{% url "accounts:login" %}" class="dropdown-item border-radius-md">
                         Sign In
                       </a>
-                      <a href="{% url "register" %}" class="dropdown-item border-radius-md">
+                      <a href="{% url "accounts:register" %}" class="dropdown-item border-radius-md">
                         Register
                       </a>
                       <a href="/page-404.html" class="dropdown-item border-radius-md">
@@ -599,7 +599,7 @@
                   </ul>
                 </li>
                 <li class="nav-item ms-lg-auto">
-                  <a class="nav-link nav-link-icon me-2" href="{% url 'logout' %}">
+                  <a class="nav-link nav-link-icon me-2" href="{% url 'accounts:logout' %}">
                     <i class="fa fa-sign-out me-1"></i>
                     <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">Logout</p>
                   </a>
