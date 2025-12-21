@@ -1,0 +1,48 @@
+{% extends "layouts/base-presentation.html" %}
+{#{% load crispy_forms_filters %}#}
+
+{% block content %}
+  <div class="container mt-sm-5">
+    <div class="page-header section-height-50 my-sm-3 mb-3 border-radius-xl" style="background-image: url('https://unsplash.com/photos/oPBjWBCcAEo/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mjd8fGJvd2wlMjBsdW5jaHxlbnwwfHx8fDE3NDU1MzIxMjJ8MA&force=true');">
+      <span class="mask bg-gradient-dark"></span>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 ms-lg-5">
+            <h1 class="text-white">Dishes</h1>
+            <p class="lead text-white opacity-8">Browse all individual dishes prepared in the kitchen. Each dish includes ingredients, assigned cook, and type.</p>
+{#            <a href="{% url 'kitchen:dish-' %}" class="text-white icon-move-right">#}
+{#              Read docs#}
+{#              <i class="fas fa-arrow-right text-sm ms-1"></i>#}
+{#            </a>#}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      {% for dish in dish_list %}
+        <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
+          <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
+            <div class="icon">
+              <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>delivery-fast</title>
+              </svg>
+            </div>
+            <div class="description ps-5">
+              <h5 class="text-white">{{ dish.name }}</h5>
+              <p class="text-white">{{ dish.description|default:"Description missing." }}</p>
+              <a href="{% url 'kitchen:dish-detail' dish.id %}" class="text-dark icon-move-right">
+                View details
+                <i class="fas fa-arrow-right text-sm ms-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center">No dishes found.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
