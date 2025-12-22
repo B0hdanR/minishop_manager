@@ -1,8 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View, generic
 from django.contrib.auth import get_user_model
 
 from shop.models import Product, Order, ProductCategory
+from shop.forms import ProductForm
 
 
 def index(request):
@@ -23,6 +26,24 @@ class ProductListView(generic.ListView):
 
 class ProductDetailView(generic.DetailView):
     model = Product
+    queryset = Product.objects.select_related("category")
+
+
+class ProductCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy("shop:product-list")
+
+
+class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy("shop:product-list")
+
+
+class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Product
+    success_url = reverse_lazy("shop:product-list")
 
 
 class OrderListView(generic.ListView):
@@ -33,6 +54,7 @@ class OrderListView(generic.ListView):
 class UserListView(generic.ListView):
     model = get_user_model()
     paginate_by = 10
+
 
 class CategoryListView(generic.ListView):
     model = ProductCategory

@@ -8,8 +8,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 ms-lg-5">
-            <h1 class="text-white">Dishes</h1>
-            <p class="lead text-white opacity-8">Browse all individual dishes prepared in the kitchen. Each dish includes ingredients, assigned cook, and type.</p>
+            <h1 class="text-white">Products</h1>
+            <p class="lead text-white opacity-8">Browse all available products in the shop.</p>
 {#            <a href="{% url 'kitchen:dish-' %}" class="text-white icon-move-right">#}
 {#              Read docs#}
 {#              <i class="fas fa-arrow-right text-sm ms-1"></i>#}
@@ -22,18 +22,31 @@
 
   <div class="container">
     <div class="row">
-      {% for dish in dish_list %}
+      {% for product in product_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
           <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
+
             <div class="icon">
               <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>delivery-fast</title>
               </svg>
             </div>
+
             <div class="description ps-5">
-              <h5 class="text-white">{{ product.name }}</h5>
-              <p class="text-white">{{ product.description|default:"Description missing." }}</p>
-              <a href="{% url 'shop:product-detail' dish.id %}" class="text-dark icon-move-right">
+              <h5 class="text-white">
+                  {{ product.name }}
+              </h5>
+              <p class="text-white">
+                  {{ product.description|default:"Description missing." }}
+              </p>
+              <p class="text-white">
+                  Price: {{ product.price }}
+              </p>
+              <p class="text-white">
+                  Price: {{ product.stock_quantity }}
+              </p>
+
+              <a href="{% url 'shop:product-detail' pk=product.id %}" class="text-dark icon-move-right">
                 View details
                 <i class="fas fa-arrow-right text-sm ms-1"></i>
               </a>
@@ -41,7 +54,7 @@
           </div>
         </div>
       {% empty %}
-        <p class="text-center">No dishes found.</p>
+        <p class="text-center">No products found.</p>
       {% endfor %}
     </div>
   </div>
