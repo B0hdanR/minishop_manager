@@ -8,12 +8,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 ms-lg-5">
-            <h1 class="text-white">Types of dishes</h1>
-            <p class="lead text-white opacity-8">Explore a variety of dish categories ranging from appetizers to desserts. These types help structure the kitchen workflow and menu planning.</p>
-{#            <a href="https://www.creative-tim.com/learning-lab/bootstrap/overview/soft-ui-design-system" class="text-white icon-move-right">#}
-{#              Read docs#}
-{#              <i class="fas fa-arrow-right text-sm ms-1"></i>#}
-{#            </a>#}
+            <h1 class="text-white">Categories</h1>
+            <p class="lead text-white opacity-8">Explore different product categories. These categories will help structure your workflow and search.</p>
           </div>
         </div>
       </div>
@@ -22,7 +18,7 @@
 
   <div class="container">
     <div class="row">
-      {% for dish_type in dish_type_list %}
+      {% for category in productcategory_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
           <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
             <div class="icon">
@@ -31,16 +27,13 @@
               </svg>
             </div>
             <div class="description ps-5">
-              <h5 class="text-white">{{ dish_type.name }}</h5>
-{#              <a href="{% url 'dish-type-detail' dish_type.id %}" class="text-primary icon-move-right">#}
-{#                View details#}
-{#                <i class="fas fa-arrow-right text-sm ms-1"></i>#}
-{#              </a>#}
+              <h5 class="text-white">{{ category.name }}</h5>
+              <p class="text-sm">Products: {{ category.products.count }}</p>
             </div>
           </div>
         </div>
       {% empty %}
-        <p class="text-center">No dish types found.</p>
+        <p class="text-center">No categories found.</p>
       {% endfor %}
     </div>
   </div>

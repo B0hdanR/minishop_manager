@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View, generic
@@ -24,7 +24,7 @@ class ProductListView(generic.ListView):
     paginate_by = 10
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     model = Product
     queryset = Product.objects.select_related("category")
 
@@ -46,16 +46,22 @@ class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("shop:product-list")
 
 
-class OrderListView(generic.ListView):
+class OrderListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model = Order
     paginate_by = 10
 
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
 
-class UserListView(generic.ListView):
+
+class UserListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model = get_user_model()
     paginate_by = 10
 
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_employee
 
-class CategoryListView(generic.ListView):
+
+class CategoryListView(LoginRequiredMixin, generic.ListView):
     model = ProductCategory
     paginate_by = 10
