@@ -128,3 +128,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 ASSETS_ROOT = "/static/assets"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = "shop:index"
+
+LOGOUT_REDIRECT_URL = "accounts:login"
+
+LOGIN_URL = "accounts:login"
