@@ -42,7 +42,7 @@
                             </svg>
                           </div>
                         </div>
-                        Landing Pages
+                        Catalog
                       </h6>
                       <a href="{% url 'shop:category-list' %}" class="dropdown-item border-radius-md">
                         Categories
@@ -50,12 +50,13 @@
                       <a href="{% url 'shop:product-list' %}" class="dropdown-item border-radius-md">
                         Products
                       </a>
-                      <a href="{% url 'shop:user-list' %}" class="dropdown-item border-radius-md">
-                        Users
-                      </a>
-                      <a href="{% url 'shop:order-list' %}" class="dropdown-item border-radius-md">
-                        Orders
-                      </a>
+                      {% if request.user.is_staff or request.user.is_employee %}
+                        <a href="{% url 'shop:order-list' %}" class="dropdown-item border-radius-md">
+                          Orders
+                        </a>
+                      {% else %}
+                        <a href="{% url 'accounts:myorder-list' %}" class="dropdown-item border-radius-md">My orders</a>
+                      {% endif %}
                       <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0 mt-3">
                         <div class="d-inline-block">
                           <div class="icon icon-shape icon-xs border-radius-md bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center ps-0">
@@ -76,10 +77,19 @@
                         </div>
                         Account
                       </h6>
-                      <a href="{% url "accounts:login" %}" class="dropdown-item border-radius-md">
+                      {% if request.user.is_staff or request.user.is_employee %}
+                        <a href="{% url 'shop:user-list' %}" class="dropdown-item border-radius-md">
+                          Users
+                        </a>
+                      {% else %}
+                        <a href="{% url 'accounts:profile' %}" class="dropdown-item border-radius-md">
+                          My account
+                        </a>
+                      {% endif %}
+                      <a href="{% url 'accounts:login' %}" class="dropdown-item border-radius-md">
                         Sign In
                       </a>
-                      <a href="{% url "accounts:register" %}" class="dropdown-item border-radius-md">
+                      <a href="{% url 'accounts:register' %}" class="dropdown-item border-radius-md">
                         Register
                       </a>
                       <a href="/page-404.html" class="dropdown-item border-radius-md">
@@ -599,15 +609,18 @@
                   </ul>
                 </li>
                 <li class="nav-item ms-lg-auto">
-                  <a class="nav-link nav-link-icon me-2" href="{% url 'accounts:logout' %}">
-                    <i class="fa fa-sign-out me-1"></i>
-                    <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">Logout</p>
-                  </a>
+                  <form method="post" action="{% url 'accounts:logout' %}" class="nav-link nav-link-icon me-2">
+                      {% csrf_token %}
+                      <button type="submit" class="nav-link nav-link-icon me-2 bg-transparent border-0 p-0">
+                        <i class="fa fa-sign-out me-1"></i>
+                        <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">Logout</p>
+                      </button>
+                  </form>
                 </li>
                 <li class="nav-item my-auto ms-3 ms-lg-0">
-                  <a href="https://appseed.us/product/soft-ui-design-pro/django/"
-                     target="_blank"
-                     class="btn btn-sm  bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0">PRO Version</a>
+                  <a href="{% url 'accounts:profile' %}" target="_blank" class="btn btn-sm  bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0">
+                      My Account
+                  </a>
                 </li>
               </ul>
             </div>
