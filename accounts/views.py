@@ -1,5 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.views import generic
+
+from shop.models import Order
 from .forms import SignUpForm
 from django.contrib.auth import get_user_model
 
@@ -22,7 +26,7 @@ def register_user(request):
             success = True
 
             messages.success(request, "Account created successfully.")
-            return redirect("/login/")
+            return redirect("accounts:login")
 
         else:
             msg = 'Form is not valid'
@@ -32,4 +36,21 @@ def register_user(request):
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
 
 
+def index(request):
+    context = {
+        "num_myorders": Order.objects.filter(user=request.user).count() if request.user.is_authenticated else 0,
+    }
+    return render(request, 'shop/index.html', context=context)
 
+
+class MyOrderListView(generic.ListView):
+    model = Order
+    paginate_by = 10
+    template_name = "accounts/myorder_list.html"
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+
+class ProfileView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "accounts/profile.html"
