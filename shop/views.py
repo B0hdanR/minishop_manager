@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db import transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
@@ -53,6 +54,7 @@ class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
 class OrderListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model = Order
     paginate_by = 10
+    ordering = ["-created_at"]
 
     def test_func(self):
         return self.request.user.is_employee or self.request.user.is_staff
@@ -121,6 +123,9 @@ def cart_detail(request):
         status="new"
     ).prefetch_related("items__product").first()
 
+    if order and order.status != "new":
+        order = None
+
     return render(request, 'shop/cart_detail.html', {'order': order})
 
 
@@ -155,17 +160,35 @@ def update_cart(request, pk):
 
 
 @login_required
+@require_POST
 def confirm_order(request):
-    order = get_object_or_404(
-        Order,
+    order = Order.objects.filter(
         user=request.user,
-        status="new")
+        status="new"
+    ).prefetch_related("items__product").first()
 
-    if order.items.count() == 0:
+    if not order:
+        messages.error(request, "No order found.")
         return redirect("shop:cart-detail")
 
-    order.status = "processing"
-    order.save()
+    for item in order.items.all():
+        if item.quantity > item.product.stock_quantity:
+            messages.error(
+                request,
+                f"{item.product.stock_quantity} items in stock for {item.product.name}"
+            )
+            return redirect("shop:cart-detail")
+
+    with transaction.atomic():
+        for item in order.items.all():
+            product = item.product
+            product.stock_quantity -= item.quantity
+            product.save()
+
+        order.status = "processing"
+        order.save()
+
+    messages.success(request, "Your order was successfully processed.")
     return redirect("accounts:myorder-list")
 
 

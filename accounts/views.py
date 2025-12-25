@@ -42,7 +42,7 @@ class MyOrderListView(generic.ListView):
     template_name = "accounts/myorder_list.html"
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).order_by("-created_at")
 
 
 class ProfileView(LoginRequiredMixin, generic.TemplateView):
