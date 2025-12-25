@@ -211,6 +211,14 @@
         console.error(countUp3.error);
       }
     }
+    if (document.getElementById('state5')) {
+      const countUp4 = new CountUp('state5', document.getElementById("state5").getAttribute("countTo"));
+      if (!countUp4.error) {
+        countUp4.start();
+      } else {
+        console.error(countUp4.error);
+      }
+    }
   </script>
 
 {% endblock javascripts %}

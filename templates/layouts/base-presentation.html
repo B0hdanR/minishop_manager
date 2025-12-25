@@ -46,6 +46,9 @@ Coded by www.creative-tim.com
     {% include "includes/navigation.html" %}
 
     {% block content %}{% endblock content %}
+    <a href="{% url 'shop:cart-detail' %}" class="btn bg-gradient-primary position-fixed" style="bottom: 20px; right: 20px; z-index: 1050;">
+      🛒 Cart
+    </a>
 
     {% block pagination %}
         {% include "includes/pagination.html" %}

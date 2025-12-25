@@ -36,13 +36,6 @@ def register_user(request):
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
 
 
-def index(request):
-    context = {
-        "num_myorders": Order.objects.filter(user=request.user).count() if request.user.is_authenticated else 0,
-    }
-    return render(request, 'shop/index.html', context=context)
-
-
 class MyOrderListView(generic.ListView):
     model = Order
     paginate_by = 10

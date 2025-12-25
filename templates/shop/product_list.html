@@ -10,10 +10,6 @@
           <div class="col-lg-6 ms-lg-5">
             <h1 class="text-white">Products</h1>
             <p class="lead text-white opacity-8">Browse all available products in the shop.</p>
-{#            <a href="{% url 'kitchen:dish-' %}" class="text-white icon-move-right">#}
-{#              Read docs#}
-{#              <i class="fas fa-arrow-right text-sm ms-1"></i>#}
-{#            </a>#}
           </div>
         </div>
       </div>
@@ -24,7 +20,7 @@
     <div class="row">
       {% for product in product_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
-          <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
+          <div class="info-horizontal border-radius-xl p-5 h-100 d-flex flex-column" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
 
             <div class="icon">
               <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -46,10 +42,22 @@
                   Price: {{ product.stock_quantity }}
               </p>
 
-              <a href="{% url 'shop:product-detail' pk=product.id %}" class="text-dark icon-move-right">
+              <a href="{% url 'shop:product-detail' pk=product.id %}" class="btn btn-outline-light btn-sm mb-3">
                 View details
                 <i class="fas fa-arrow-right text-sm ms-1"></i>
               </a>
+
+              <div class="mt-auto">
+                <form method="post" action="{% url 'shop:add-to-cart' pk=product.id%}">
+                  {% csrf_token %}
+                    <div class="mb-2">
+                      <input type="number" name="quantity" value="1" class="form-control">
+                    </div>
+                    <button type="submit" class="btn bg-gradient-primary w-100">
+                      Add to cart
+                    </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
