@@ -34,6 +34,7 @@ class Order(models.Model):
         ("new", "New"),
         ("processing", "Processing"),
         ("completed", "Completed"),
+        ("failed", "Failed"),
     ]
 
     user = models.ForeignKey(
@@ -43,6 +44,9 @@ class Order(models.Model):
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default="new"
     )
+
+    def get_total_price(self):
+        return sum(item.get_total_price() for item in self.items.all())
 
     def __str__(self):
         return f"Order #{self.id}"
@@ -56,6 +60,9 @@ class OrderItem(models.Model):
         Product, on_delete=models.CASCADE, related_name="order_items"
     )
     quantity = models.PositiveIntegerField(default=1)
+
+    def get_total_price(self):
+        return self.quantity * self.product.price
 
     def __str__(self):
         return f"{self.product.name} x {self.quantity}"

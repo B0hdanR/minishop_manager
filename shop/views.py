@@ -85,7 +85,7 @@ def add_to_cart(request, pk):
         product=product,
     )
 
-    if  created:
+    if created:
         order_item.quantity = quantity
     else:
         order_item.quantity += quantity

@@ -45,14 +45,28 @@
             </div>
           </div>
         {% endfor %}
-      </div>
 
-      <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-primary">
-        Back to products
-      </a>
-      <a href="{% url 'shop:order-confirm' %}" class="btn bg-gradient-primary">
-        Confirm order
-      </a>
+      </div>
+      {% if order %}
+          <div class="text-end">
+              <h5 class="mb-0">Total: {{ order.get_total_price }}</h5>
+          </div>
+      {% endif %}
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-primary">
+          Back to products
+        </a>
+        {% if order %}
+          <div class="d-flex justify-content-end">
+            <form method="post" action="{% url 'shop:order-confirm' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn bg-gradient-primary">
+                Confirm order
+              </button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
     {% else %}
       <p class="text-center">Cart is empty.</p>
       <div class="text-center">
