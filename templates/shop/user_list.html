@@ -8,8 +8,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6 ms-lg-5">
-            <h1 class="text-white">Cooks</h1>
-            <p class="lead text-white opacity-8">View and manage kitchen staff. Assign cooks to dishes based on their expertise.</p>
+            <h1 class="text-white">Users</h1>
+            <p class="lead text-white opacity-8">View and manage users.</p>
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
 
   <div class="container">
     <div class="row">
-      {% for cook in cook_list %}
+      {% for user in user_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
           <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
             <div class="icon">
@@ -27,9 +27,9 @@
               </svg>
             </div>
             <div class="description ps-5">
-              <h5 class="text-white">{{ cook.username }}</h5>
-              <p class="text-white">Years of experience: {{ cook.years_of_experience|default:"0" }}</p>
-              <a href="{% url 'shop:product-list' product.id %}" class="text-dark icon-move-right">
+              <h5 class="text-white">{{ user.username }}</h5>
+              <p class="text-white">Last login: {{ user.last_login }}</p>
+              <a href="{% url 'shop:user-list' %}" class="text-dark icon-move-right">
                 View details
                 <i class="fas fa-arrow-right text-sm ms-1"></i>
               </a>
