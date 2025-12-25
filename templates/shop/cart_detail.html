@@ -29,6 +29,7 @@
               <div class="description ps-5">
                 <h5 class="text-white">{{ item.product.name }}</h5>
                 <p class="text-sm">Price: {{ item.product.price }}</p>
+                <p class="text-sm">In stock: {{ item.product.stock_quantity }}</p>
 
                 <div class="mt-auto">
                   <form method="post" action="{% url 'shop:cart-update' pk=item.id %}">
@@ -40,6 +41,12 @@
                       Save
                     </button>
                   </form>
+                  <div class="d-flex justify-content-end">
+                    <form method="post" action="{% url 'shop:cart-remove' pk=item.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>

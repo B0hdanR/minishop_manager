@@ -41,9 +41,30 @@ Coded by www.creative-tim.com
 
 </head>
 
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(alert => {
+      alert.classList.remove('show');
+      alert.classList.add('fade');
+    });
+  }, 3000);
+</script>
+
+
 <body class="{% block body_class %}{% endblock body_class %}">
 
     {% include "includes/navigation.html" %}
+
+    {% if messages %}
+      <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} shadow fade show fs-4 px-5 py-4">
+              {{ message }}
+            </div>
+          {% endfor %}
+      </div>
+    {% endif %}
 
     {% block content %}{% endblock content %}
     <a href="{% url 'shop:cart-detail' %}" class="btn bg-gradient-primary position-fixed" style="bottom: 20px; right: 20px; z-index: 1050;">

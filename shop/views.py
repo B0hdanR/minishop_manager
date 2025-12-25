@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views import View, generic
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 from shop.models import Product, Order, ProductCategory, OrderItem
 from shop.forms import ProductForm
@@ -75,6 +76,17 @@ def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
     quantity = int(request.POST.get("quantity", 1))
 
+    if quantity > product.stock_quantity:
+        quantity = product.stock_quantity
+        messages.warning(
+            request,
+            f"{product.stock_quantity} items in stock"
+        )
+
+    if quantity <= 0:
+        messages.error(request, "There must be at least 1.")
+        return redirect(request.META.get("HTTP_REFERER", "shop:product-list"))
+
     order, _ = Order.objects.get_or_create(
         user=request.user,
         status="new"
@@ -88,7 +100,15 @@ def add_to_cart(request, pk):
     if created:
         order_item.quantity = quantity
     else:
-        order_item.quantity += quantity
+        new_quantity = order_item.quantity + quantity
+        if new_quantity > product.stock_quantity:
+            order_item.quantity = product.stock_quantity
+            messages.warning(
+                request,
+                f"{product.stock_quantity} items in stock"
+            )
+        else:
+            order_item.quantity = new_quantity
     order_item.save()
 
     return redirect(request.META.get("HTTP_REFERER", "shop:product-list"))
@@ -114,20 +134,32 @@ def update_cart(request, pk):
         order__status="new"
     )
 
-    if request.POST.get("action") == "set" and request.POST.get("quantity"):
-        item.quantity = max(1, int(request.POST.get("quantity")))
+    quantity = int(request.POST.get("quantity", 1))
 
-    if item.quantity <= 0:
+    if quantity <= 0:
         item.delete()
-    else:
-        item.save()
+        messages.info(request, f"{item.product.name} removed from cart.")
+        return redirect("shop:cart-detail")
+
+    if quantity > item.product.stock_quantity:
+        quantity = item.product.stock_quantity
+        messages.warning(
+            request,
+            f"{item.product.stock_quantity} items in stock"
+        )
+
+    item.quantity = quantity
+    item.save()
 
     return redirect("shop:cart-detail")
 
 
 @login_required
 def confirm_order(request):
-    order = get_object_or_404(Order, user=request.user, status="new")
+    order = get_object_or_404(
+        Order,
+        user=request.user,
+        status="new")
 
     if order.items.count() == 0:
         return redirect("shop:cart-detail")
@@ -135,3 +167,17 @@ def confirm_order(request):
     order.status = "processing"
     order.save()
     return redirect("accounts:myorder-list")
+
+
+@login_required
+@require_POST
+def remove_from_cart(request, pk):
+    item = get_object_or_404(
+        OrderItem,
+        pk=pk,
+        order__user=request.user,
+        order__status="new"
+    )
+
+    item.delete()
+    return redirect("shop:cart-detail")

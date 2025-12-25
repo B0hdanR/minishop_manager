@@ -39,7 +39,7 @@
                   Price: {{ product.price }}
               </p>
               <p class="text-white">
-                  Price: {{ product.stock_quantity }}
+                  In stock: {{ product.stock_quantity }}
               </p>
 
               <a href="{% url 'shop:product-detail' pk=product.id %}" class="btn btn-outline-light btn-sm mb-3">

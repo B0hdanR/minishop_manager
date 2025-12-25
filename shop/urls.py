@@ -12,7 +12,7 @@ from .views import (
     CategoryListView,
     add_to_cart,
     cart_detail,
-    confirm_order, update_cart
+    confirm_order, update_cart, remove_from_cart
 )
 
 urlpatterns = [
@@ -39,8 +39,10 @@ urlpatterns = [
          name="cart-detail"),
     path("order/confirm", confirm_order,
          name="order-confirm"),
-    path("cart/item/<int:pk>/update/", update_cart,
+    path("cart/update/<int:pk>/", update_cart,
          name="cart-update"),
+    path("cart/remove/<int:pk>/", remove_from_cart,
+         name="cart-remove"),
 ]
 
 app_name = "shop"
