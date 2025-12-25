@@ -29,6 +29,7 @@
             <div class="description ps-5">
               <h5 class="text-white">Order: {{ order.id }}</h5>
               <p class="text-sm">Status: {{ order.status }}</p>
+              <p class="text-sm">User: {{ order.user.get_full_name|default:order.user.username }}</p>
               <p class="text-sm">Created: {{ order.created_at|date:"Y-m-d H:i" }}</p>
             </div>
           </div>

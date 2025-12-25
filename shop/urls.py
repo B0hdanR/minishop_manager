@@ -9,7 +9,10 @@ from .views import (
     ProductDeleteView,
     OrderListView,
     UserListView,
-    CategoryListView
+    CategoryListView,
+    add_to_cart,
+    cart_detail,
+    confirm_order, update_cart
 )
 
 urlpatterns = [
@@ -30,6 +33,14 @@ urlpatterns = [
          name='user-list'),
     path('categories/', CategoryListView.as_view(),
          name='category-list'),
+    path("cart/add/<int:pk>", add_to_cart,
+         name="add-to-cart"),
+    path("cart/", cart_detail,
+         name="cart-detail"),
+    path("order/confirm", confirm_order,
+         name="order-confirm"),
+    path("cart/item/<int:pk>/update/", update_cart,
+         name="cart-update"),
 ]
 
 app_name = "shop"
