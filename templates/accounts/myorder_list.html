@@ -20,18 +20,20 @@
     <div class="row">
       {% for order in order_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
-          <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
-            <div class="icon">
-              <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <title>delivery-fast</title>
-              </svg>
+          <a href="{% url 'accounts:myorder-detail' pk=order.id%}" class="text-decoration-none">
+            <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
+              <div class="icon">
+                <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <title>delivery-fast</title>
+                </svg>
+              </div>
+              <div class="description ps-5">
+                <h5 class="text-white">Order: {{ order.id }}</h5>
+                <p class="text-sm">Status: {{ order.status }}</p>
+                <p class="text-sm">Created: {{ order.created_at|date:"Y-m-d H:i" }}</p>
+              </div>
             </div>
-            <div class="description ps-5">
-              <h5 class="text-white">Order: {{ order.id }}</h5>
-              <p class="text-sm">Status: {{ order.status }}</p>
-              <p class="text-sm">Created: {{ order.created_at|date:"Y-m-d H:i" }}</p>
-            </div>
-          </div>
+          </a>
         </div>
       {% empty %}
         <p class="text-center">No orders found.</p>

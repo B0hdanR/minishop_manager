@@ -78,7 +78,7 @@
                         Account
                       </h6>
                       {% if request.user.is_staff or request.user.is_employee %}
-                        <a href="{% url 'shop:user-list' %}" class="dropdown-item border-radius-md">
+                        <a href="{% url 'accounts:user-list' %}" class="dropdown-item border-radius-md">
                           Users
                         </a>
                       {% else %}
