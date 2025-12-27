@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -36,13 +36,41 @@ def register_user(request):
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
 
 
-class MyOrderListView(generic.ListView):
+class UserListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model = User
+    context_object_name = "user_list"
+    template_name = "accounts/user_list.html"
+    paginate_by = 10
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_employee
+
+
+class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = User
+    template_name = "accounts/user_detail.html"
+    context_object_name = "user_detail"
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_employee
+
+
+class MyOrderListView(LoginRequiredMixin, generic.ListView):
     model = Order
     paginate_by = 10
     template_name = "accounts/myorder_list.html"
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).order_by("-created_at")
+
+
+class MyOrderDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Order
+    paginate_by = 20
+    template_name = "accounts/myorder_detail.html"
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).prefetch_related("items__product")
 
 
 class ProfileView(LoginRequiredMixin, generic.TemplateView):
