@@ -60,12 +60,12 @@ class OrderListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return self.request.user.is_employee or self.request.user.is_staff
 
 
-class UserListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
-    model = get_user_model()
-    paginate_by = 10
+class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = Order
+    queryset = Order.objects.prefetch_related("items__product")
 
     def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_employee
+        return self.request.user.is_employee or self.request.user.is_staff
 
 
 class CategoryListView(LoginRequiredMixin, generic.ListView):
