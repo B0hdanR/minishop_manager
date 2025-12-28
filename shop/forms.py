@@ -1,5 +1,5 @@
 from django import forms
-from shop.models import Product
+from shop.models import Product, Order
 
 
 class ProductForm(forms.ModelForm):
@@ -12,3 +12,8 @@ class ProductForm(forms.ModelForm):
             "stock_quantity",
             "category",
         ]
+
+class OrderStatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ["status"]

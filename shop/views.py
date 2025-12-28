@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 
 from shop.models import Product, Order, ProductCategory, OrderItem
-from shop.forms import ProductForm
+from shop.forms import ProductForm, OrderStatusUpdateForm
 
 
 def index(request):
@@ -66,6 +66,25 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVie
 
     def test_func(self):
         return self.request.user.is_employee or self.request.user.is_staff
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
+        context["form"] = OrderStatusUpdateForm(
+            instance=self.object
+        )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = OrderStatusUpdateForm(request.POST, instance=self.object)
+
+        if form.is_valid():
+            form.save()
+            return redirect("shop:order-detail", pk=self.object.pk)
+
+        context = self.get_context_data()
+        context["form"] = form
+        return self.render_to_response(context)
 
 
 class CategoryListView(LoginRequiredMixin, generic.ListView):
