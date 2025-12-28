@@ -54,6 +54,11 @@ class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_employee
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["back_url"] = self.request.META.get("HTTP_REFERER")
+        return context
+
 
 class MyOrderListView(LoginRequiredMixin, generic.ListView):
     model = Order
