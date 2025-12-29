@@ -14,6 +14,31 @@
         </div>
       </div>
     </div>
+    <h5 class="mb-3">Filter products</h5>
+    <form method="get" class="row g-2 mb-4" >
+      <div class="col-md-3">
+        {{  filter_form.name }}
+      </div>
+      <div class="col-md-3">
+        {{  filter_form.category  }}
+      </div>
+      <div class="col-md-2">
+        {{  filter_form.price_min  }}
+      </div>
+      <div class="col-md-2">
+        {{  filter_form.price_max  }}
+      </div>
+      <div class="col-md-1">
+        <button class="btn bg-gradient-primary">
+          🔎
+        </button>
+      </div>
+      <div class="col-md-1">
+        <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-primary">
+          Reset
+        </a>
+      </div>
+    </form>
   </div>
 
   <div class="container">

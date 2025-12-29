@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 
-from shop.mixins import OrderFilterMixin
+from shop.mixins import OrderFilterMixin, ProductFilterMixin
 from shop.models import Product, Order, ProductCategory, OrderItem
 from shop.forms import ProductForm, OrderStatusUpdateForm, OrderFilterForm
 
@@ -25,9 +25,8 @@ def index(request):
     return render(request, 'shop/index.html', context=context)
 
 
-class ProductListView(generic.ListView):
+class ProductListView(LoginRequiredMixin, ProductFilterMixin, generic.ListView):
     model = Product
-    queryset = Product.objects.select_related("category")
     paginate_by = 10
 
 

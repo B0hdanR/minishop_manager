@@ -1,5 +1,5 @@
 from django import forms
-from shop.models import Product, Order
+from shop.models import Product, Order, ProductCategory
 
 
 class ProductForm(forms.ModelForm):
@@ -13,10 +13,12 @@ class ProductForm(forms.ModelForm):
             "category",
         ]
 
+
 class OrderStatusUpdateForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ["status"]
+
 
 class OrderFilterForm(forms.Form):
     name = forms.CharField(
@@ -73,3 +75,44 @@ class OrderFilterForm(forms.Form):
     class Meta:
         model = Order
         fields = ["status"]
+
+
+class ProductFilterForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Product name",
+            "class": "form-control",
+        })
+    )
+
+    category = forms.ModelChoiceField(
+        required=False,
+        queryset=ProductCategory.objects.all(),
+        widget=forms.Select(attrs={
+            "class": "form-control",
+            "placeholder": "Category",
+        }),
+    )
+
+    price_min = forms.DecimalField(
+        required=False,
+        min_value=0,
+        label="Min total",
+        widget=forms.NumberInput(attrs={
+            "class": "form-control",
+            "placeholder": "Min total",
+        }),
+    )
+
+    price_max = forms.DecimalField(
+        required=False,
+        min_value=0,
+        label="Max total",
+        widget=forms.NumberInput(attrs={
+            "class": "form-control",
+            "placeholder": "Max total",
+        }),
+    )

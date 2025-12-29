@@ -1,6 +1,6 @@
 from django.db.models import Sum, F
-from shop.forms import OrderFilterForm
-from shop.models import Order
+from shop.forms import OrderFilterForm, ProductFilterForm
+from shop.models import Order, Product
 
 
 class OrderFilterMixin:
@@ -45,6 +45,46 @@ class OrderFilterMixin:
                 queryset = queryset.filter(created_at__date__gte=date_from)
             if date_to:
                 queryset = queryset.filter(created_at__date__lte=date_to)
+        self.filter_form = form
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter_form"] = getattr(
+            self, "filter_form", self.filter_from_class()
+        )
+        return context
+
+
+class ProductFilterMixin:
+    filter_from_class = ProductFilterForm
+
+    def get_queryset(self):
+        queryset = Product.objects.select_related("category")
+        form = self.filter_from_class(self.request.GET)
+
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            category = form.cleaned_data.get("category")
+            price_min = form.cleaned_data.get("price_min")
+            price_max = form.cleaned_data.get("price_max")
+
+            if name:
+                if name.isdigit():
+                    queryset = queryset.filter(id=int(name))
+                else:
+                    queryset = queryset.filter(name__icontains=name)
+
+
+            if category:
+                queryset = queryset.filter(category=category)
+
+            if price_min is not None:
+                queryset = queryset.filter(price__gte=price_min)
+            if price_max is not None:
+                queryset = queryset.filter(price__lte=price_max)
+
+
         self.filter_form = form
         return queryset
 
