@@ -16,10 +16,12 @@ urlpatterns = [
          name='register'),
     path('logout/', LogoutView.as_view(),
          name='logout'),
+
     path('myorders/', MyOrderListView.as_view(),
          name='myorder-list'),
     path('myorders/<int:pk>/', MyOrderDetailView.as_view(),
          name='myorder-detail'),
+
     path('profile/', ProfileView.as_view(),
          name='profile'),
     path('users/', UserListView.as_view(),

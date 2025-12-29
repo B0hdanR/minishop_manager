@@ -14,6 +14,26 @@ class ProductForm(forms.ModelForm):
         ]
 
 
+class ProductCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ["name"]
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "placeholder": "Category name",
+            })
+        }
+
+
+class ProductCategorySearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search category"}),
+    )
+
+
 class OrderStatusUpdateForm(forms.ModelForm):
     class Meta:
         model = Order

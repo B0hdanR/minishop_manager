@@ -14,6 +14,28 @@
         </div>
       </div>
     </div>
+    <form method="get" class="row g-2 mb-4" >
+      <div class="col-md-4">
+        {{  search_form.name }}
+      </div>
+      <div class="col-md-2">
+        <button class="btn bg-gradient-primary">
+          🔎
+        </button>
+      </div>
+      <div class="col-md-1">
+        <a href="{% url 'shop:productcategory-list' %}" class="btn bg-gradient-primary">
+          Reset
+        </a>
+      </div>
+    </form>
+    {% if request.user.is_staff or request.user.is_employee %}
+      <div class="container row">
+        <a href="{% url 'shop:productcategory-create' %}" class="btn bg-gradient-primary">
+          Add category
+        </a>
+      </div>
+    {% endif %}
   </div>
 
   <div class="container">
@@ -21,14 +43,23 @@
       {% for category in productcategory_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
           <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
-            <div class="icon">
-              <svg class="text-white" width="25px" height="25px" viewBox="0 0 46 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <title>delivery-fast</title>
-              </svg>
-            </div>
             <div class="description ps-5">
               <h5 class="text-white">{{ category.name }}</h5>
               <p class="text-sm">Products: {{ category.products.count }}</p>
+              <a href="{% url 'shop:productcategory-detail' pk=category.id %}" class="btn btn-outline-light btn-sm mb-3">
+                View details
+                <i class="fas fa-arrow-right text-sm ms-1"></i>
+              </a>
+              {% if request.user.is_staff or request.user.is_employee %}
+                <div class="d-flex gap-2 mb-3">
+                  <a href="{% url 'shop:productcategory-update' pk=category.id %}" class="btn bg-gradient-primary">
+                    Edit
+                  </a>
+                  <a href="{% url 'shop:productcategory-delete' pk=category.id %}" class="btn btn-danger">
+                    Delete
+                  </a>
+                </div>
+              {% endif %}
             </div>
           </div>
         </div>

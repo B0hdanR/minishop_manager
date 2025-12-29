@@ -11,7 +11,12 @@ from django.contrib import messages
 
 from shop.mixins import OrderFilterMixin, ProductFilterMixin
 from shop.models import Product, Order, ProductCategory, OrderItem
-from shop.forms import ProductForm, OrderStatusUpdateForm, OrderFilterForm
+from shop.forms import (
+    ProductForm,
+    OrderStatusUpdateForm,
+    ProductCategorySearchForm,
+    ProductCategoryForm
+)
 
 
 def index(request):
@@ -98,9 +103,58 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVie
         return self.render_to_response(context)
 
 
-class CategoryListView(LoginRequiredMixin, generic.ListView):
+class ProductCategoryListView(LoginRequiredMixin, generic.ListView):
     model = ProductCategory
     paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoryListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ProductCategorySearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = ProductCategory.objects.all()
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
+
+
+class ProductCategoryDetailView(LoginRequiredMixin, generic.DetailView):
+    model = ProductCategory
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoryDetailView, self).get_context_data(**kwargs)
+        context["products"] = Product.objects.filter(category=self.object).select_related("category")
+        return context
+
+
+class ProductCategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = ProductCategory
+    form_class = ProductCategoryForm
+    success_url = reverse_lazy("shop:productcategory-list")
+
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
+
+
+class ProductCategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = ProductCategory
+    form_class = ProductCategoryForm
+    success_url = reverse_lazy("shop:productcategory-list")
+
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
+
+
+class ProductCategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = ProductCategory
+    success_url = reverse_lazy("shop:productcategory-list")
+
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
 
 
 @login_required
