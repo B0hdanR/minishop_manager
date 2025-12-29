@@ -6,7 +6,7 @@ from .views import (
     MyOrderListView,
     ProfileView,
     MyOrderDetailView,
-    UserListView, UserDetailView
+    UserListView, UserDetailView, SupportCreateView
 )
 
 urlpatterns = [
@@ -28,6 +28,9 @@ urlpatterns = [
          name='user-list'),
     path('users/<int:pk>/', UserDetailView.as_view(),
          name='user-detail'),
+
+    path('support/', SupportCreateView.as_view(),
+         name='support'),
 ]
 
 app_name = "accounts"

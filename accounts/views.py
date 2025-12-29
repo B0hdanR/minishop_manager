@@ -1,12 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import generic
 
 from shop.mixins import OrderFilterMixin, BackUrlDetailMixin
 from shop.models import Order
-from .forms import SignUpForm
+from .forms import SignUpForm, SupportRequestForm
 from django.contrib.auth import get_user_model
+
+from .models import SupportRequest
 
 User = get_user_model()
 
@@ -76,3 +79,18 @@ class MyOrderDetailView(LoginRequiredMixin, BackUrlDetailMixin, generic.DetailVi
 
 class ProfileView(LoginRequiredMixin, generic.TemplateView):
     template_name = "accounts/profile.html"
+
+
+class SupportCreateView(generic.CreateView):
+    model = SupportRequest
+    form_class = SupportRequestForm
+    template_name = "accounts/support_form.html"
+    success_url = reverse_lazy("shop:index")
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.user = self.request.user
+
+        messages.success(self.request, "The message was sent successfully.")
+
+        return super().form_valid(form)

@@ -158,7 +158,12 @@
                 </svg>
               </div>
               <h2 class="text-white up mb-0">Shop</h2>
-              <a href="{% url 'shop:product-list' %}" class="btn btn-outline-white mt-5 up btn-round">Browse products</a>
+              <a href="{% url 'shop:product-list' %}" class="btn btn-outline-white mt-5 up btn-round">
+                Browse products
+              </a>
+              <a href="{% url 'shop:productcategory-list' %}" class="btn btn-outline-white mt-5 up btn-round">
+                Browse categories
+              </a>
             </div>
           </div>
         </div>
@@ -174,7 +179,6 @@
   <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
   <script src="{{ ASSETS_ROOT }}/js/plugins/rellax.min.js"></script>
   <script src="{{ ASSETS_ROOT }}/js/plugins/tilt.min.js"></script>
-  <script src="{{ ASSETS_ROOT }}/js/plugins/choices.min.js"></script>
 
   <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
   <script type="text/javascript">

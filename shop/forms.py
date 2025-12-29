@@ -30,7 +30,10 @@ class ProductCategorySearchForm(forms.Form):
         max_length=100,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search category"}),
+        widget=forms.TextInput(attrs={
+            "placeholder": "Search category",
+            "class": "form-control",
+        }),
     )
 
 
