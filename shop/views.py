@@ -3,13 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
 from django.db.models import F, Sum, Q
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View, generic
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 
-from shop.mixins import OrderFilterMixin, ProductFilterMixin
+from shop.mixins import OrderFilterMixin, ProductFilterMixin, BackUrlDetailMixin
 from shop.models import Product, Order, ProductCategory, OrderItem
 from shop.forms import (
     ProductForm,
@@ -19,6 +19,7 @@ from shop.forms import (
 )
 
 
+@login_required
 def index(request):
     context = {
         "num_categories": ProductCategory.objects.count(),
@@ -35,7 +36,7 @@ class ProductListView(LoginRequiredMixin, ProductFilterMixin, generic.ListView):
     paginate_by = 10
 
 
-class ProductDetailView(LoginRequiredMixin, generic.DetailView):
+class ProductDetailView(LoginRequiredMixin, BackUrlDetailMixin, generic.DetailView):
     model = Product
     queryset = Product.objects.select_related("category")
 
@@ -70,13 +71,12 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 class OrderListView(LoginRequiredMixin, UserPassesTestMixin, OrderFilterMixin, generic.ListView):
     model = Order
     paginate_by = 10
-    ordering = ["-created_at"]
 
     def test_func(self):
         return self.request.user.is_employee or self.request.user.is_staff
 
 
-class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, BackUrlDetailMixin, generic.DetailView):
     model = Order
     queryset = Order.objects.prefetch_related("items__product")
 
@@ -123,7 +123,7 @@ class ProductCategoryListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class ProductCategoryDetailView(LoginRequiredMixin, generic.DetailView):
+class ProductCategoryDetailView(LoginRequiredMixin, BackUrlDetailMixin, generic.DetailView):
     model = ProductCategory
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductCategoryDetailView, self).get_context_data(**kwargs)
@@ -162,6 +162,8 @@ def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
     quantity = int(request.POST.get("quantity", 1))
 
+    next_url = request.GET.get("next") or reverse("shop:product-list")
+
     if quantity > product.stock_quantity:
         quantity = product.stock_quantity
         messages.warning(
@@ -171,7 +173,7 @@ def add_to_cart(request, pk):
 
     if quantity <= 0:
         messages.error(request, "There must be at least 1.")
-        return redirect(request.META.get("HTTP_REFERER", "shop:product-list"))
+        return redirect(next_url)
 
     order, _ = Order.objects.get_or_create(
         user=request.user,
@@ -197,7 +199,7 @@ def add_to_cart(request, pk):
             order_item.quantity = new_quantity
     order_item.save()
 
-    return redirect(request.META.get("HTTP_REFERER", "shop:product-list"))
+    return redirect(next_url)
 
 
 @login_required

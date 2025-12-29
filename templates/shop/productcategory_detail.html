@@ -22,7 +22,11 @@
             </h2>
 
             <a href="{% url 'shop:productcategory-list' %}" class="btn bg-gradient-secondary icon-move-right">
-              Back to categories
+              Go to categories
+              <i class="fas fa-arrow-right text-sm ms-1"></i>
+            </a>
+            <a href="{{ back_url|default:'/' }}" class="btn bg-gradient-secondary icon-move-right">
+              Back
               <i class="fas fa-arrow-right text-sm ms-1"></i>
             </a>
           </div>

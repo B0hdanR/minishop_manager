@@ -91,7 +91,7 @@
               {% endif %}
 
               <div class="mt-auto">
-                <form method="post" action="{% url 'shop:add-to-cart' pk=product.id%}">
+                <form method="post" action="{% url 'shop:add-to-cart' pk=product.id%}?next={{ request.get_full_path|urlencode }}">
                   {% csrf_token %}
                     <div class="mb-2">
                       <input type="number" name="quantity" value="1" class="form-control">

@@ -15,7 +15,7 @@ class OrderFilterMixin:
         )
 
     def get_queryset(self):
-        queryset = self.get_base_queryset()
+        queryset = self.get_base_queryset().order_by("-created_at")
         form = self.filter_from_class(self.request.GET)
 
         if form.is_valid():
@@ -93,4 +93,14 @@ class ProductFilterMixin:
         context["filter_form"] = getattr(
             self, "filter_form", self.filter_from_class()
         )
+        return context
+
+
+class BackUrlDetailMixin:
+    def get_back_url(self):
+        return self.request.META.get("HTTP_REFERER")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["back_url"] = self.get_back_url()
         return context

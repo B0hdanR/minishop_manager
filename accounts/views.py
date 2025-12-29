@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from shop.mixins import OrderFilterMixin
+from shop.mixins import OrderFilterMixin, BackUrlDetailMixin
 from shop.models import Order
 from .forms import SignUpForm
 from django.contrib.auth import get_user_model
@@ -47,18 +47,13 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return self.request.user.is_staff or self.request.user.is_employee
 
 
-class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, BackUrlDetailMixin, generic.DetailView):
     model = User
     template_name = "accounts/user_detail.html"
     context_object_name = "user_detail"
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_employee
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["back_url"] = self.request.META.get("HTTP_REFERER")
-        return context
 
 
 class MyOrderListView(LoginRequiredMixin, OrderFilterMixin, generic.ListView):
@@ -70,8 +65,7 @@ class MyOrderListView(LoginRequiredMixin, OrderFilterMixin, generic.ListView):
     def get_base_queryset(self):
         return super().get_base_queryset().filter(user=self.request.user).order_by("-created_at")
 
-
-class MyOrderDetailView(LoginRequiredMixin, generic.DetailView):
+class MyOrderDetailView(LoginRequiredMixin, BackUrlDetailMixin, generic.DetailView):
     model = Order
     paginate_by = 20
     template_name = "accounts/myorder_detail.html"

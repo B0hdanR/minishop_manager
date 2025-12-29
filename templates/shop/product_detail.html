@@ -31,11 +31,27 @@
         <p>
           {% if object.stock_quantity > 0 %}
           <h4 class="text-success"> {{ object.stock_quantity }} pieces</h4>
+          <div class="mt-auto">
+            <form method="post" action="{% url 'shop:add-to-cart' pk=product.id%}?next={{ request.get_full_path|urlencode }}">
+              {% csrf_token %}
+                <div class="mb-2">
+                  <input type="number" name="quantity" value="1" class="form-control">
+                </div>
+                <button type="submit" class="btn bg-gradient-primary w-100">
+                  Add to cart
+                </button>
+            </form>
+          </div>
           {% else %}
           <h4 class="text-danger"> Not available </h4>
           {% endif %}
         </p>
-        <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-secondary icon-move-right">Back to products
+        <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-secondary icon-move-right">
+          Go to products
+          <i class="fas fa-arrow-right text-sm ms-1"></i>
+        </a>
+        <a href="{{ back_url|default:'/' }}" class="btn bg-gradient-secondary icon-move-right">
+          Back
           <i class="fas fa-arrow-right text-sm ms-1"></i>
         </a>
       </div>

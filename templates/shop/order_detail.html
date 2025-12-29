@@ -24,7 +24,11 @@
             </form>
             <h4 class="text-end">
               <a href="{% url 'shop:order-list' %}" class="btn btn-outline-light btn-sm mb-3">
+                Go to orders
+              </a>
+              <a href="{{ back_url|default:'/' }}" class="btn btn-outline-light btn-sm mb-3">
                 Back
+                <i class="fas fa-arrow-right text-sm ms-1"></i>
               </a>
             </h4>
           </div>
