@@ -35,21 +35,31 @@ class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Product.objects.select_related("category")
 
 
-class ProductCreateView(LoginRequiredMixin, generic.CreateView):
+class ProductCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("shop:product-list")
 
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
 
-class ProductUpdateView(LoginRequiredMixin, generic.UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("shop:product-list")
 
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
 
-class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Product
     success_url = reverse_lazy("shop:product-list")
+
+    def test_func(self):
+        return self.request.user.is_employee or self.request.user.is_staff
+
 
 
 class OrderListView(LoginRequiredMixin, UserPassesTestMixin, OrderFilterMixin, generic.ListView):

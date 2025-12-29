@@ -72,10 +72,6 @@ class OrderFilterForm(forms.Form):
         }),
     )
 
-    class Meta:
-        model = Order
-        fields = ["status"]
-
 
 class ProductFilterForm(forms.Form):
     name = forms.CharField(
