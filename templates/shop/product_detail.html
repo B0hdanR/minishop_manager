@@ -17,25 +17,25 @@
           <i class="ni ni-building"></i>
         </div>
         <h4 class="text-gradient text-primary mb-0">
-            {{ object.category.name }}
+          {{ object.category.name }}
         </h4>
         <h2>
-            {{ object.name }}
+          {{ object.name }}
         </h2>
         <h4 class="mb-4">
-            {{ object.description|default:"Description missing." }}
+          {{ object.description|default:"Description missing." }}
         </h4>
         <h4>
-            Price: {{ object.price }}
+          Price: {{ object.price }}
         </h4>
         <p>
-            {% if object.stock_quantity > 0 %}
-            <h4 class="text-success"> {{ object.stock_quantity }} pieces</h4>
-            {% else %}
-            <h4 class="text-danger"> Not available </h4>
-            {% endif %}
+          {% if object.stock_quantity > 0 %}
+          <h4 class="text-success"> {{ object.stock_quantity }} pieces</h4>
+          {% else %}
+          <h4 class="text-danger"> Not available </h4>
+          {% endif %}
         </p>
-        <a href="{% url 'shop:product-list' %}" target="blank" rel="nofollow" class="text-dark icon-move-right">Back to products
+        <a href="{% url 'shop:product-list' %}" class="btn bg-gradient-secondary icon-move-right">Back to products
           <i class="fas fa-arrow-right text-sm ms-1"></i>
         </a>
       </div>

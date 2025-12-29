@@ -1,0 +1,56 @@
+from django.db.models import Sum, F
+from shop.forms import OrderFilterForm
+from shop.models import Order
+
+
+class OrderFilterMixin:
+    filter_from_class = OrderFilterForm
+
+    def get_base_queryset(self):
+        return (
+            Order.objects.
+            select_related("user").
+            prefetch_related("items__product").
+            annotate(total=Sum(F("items__quantity")*F("items__product__price")))
+        )
+
+    def get_queryset(self):
+        queryset = self.get_base_queryset()
+        form = self.filter_from_class(self.request.GET)
+
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            status = form.cleaned_data.get("status")
+            total_min = form.cleaned_data.get("total_min")
+            total_max = form.cleaned_data.get("total_max")
+            date_from = form.cleaned_data.get("date_from")
+            date_to = form.cleaned_data.get("date_to")
+
+            if name:
+                if name.isdigit():
+                    queryset = queryset.filter(id=int(name))
+                else:
+                    queryset = queryset.filter(user__username__icontains=name)
+
+
+            if status:
+                queryset = queryset.filter(status=status)
+
+            if total_min is not None:
+                queryset = queryset.filter(total__gte=total_min)
+            if total_max is not None:
+                queryset = queryset.filter(total__lte=total_max)
+
+            if date_from:
+                queryset = queryset.filter(created_at__date__gte=date_from)
+            if date_to:
+                queryset = queryset.filter(created_at__date__lte=date_to)
+        self.filter_form = form
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter_form"] = getattr(
+            self, "filter_form", self.filter_from_class()
+        )
+        return context

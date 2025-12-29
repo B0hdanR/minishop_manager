@@ -14,6 +14,37 @@
         </div>
       </div>
     </div>
+    <h5 class="mb-3">Filter orders</h5>
+    <form method="get" class="row g-2 mb-4" >
+      <div class="col-md-2">
+        {{  filter_form.name }}
+      </div>
+      <div class="col-md-1">
+        {{  filter_form.status  }}
+      </div>
+      <div class="col-md-1">
+        {{  filter_form.total_min  }}
+      </div>
+      <div class="col-md-1">
+        {{  filter_form.total_max  }}
+      </div>
+      <div class="col-md-2">
+        {{  filter_form.date_from  }}
+      </div>
+      <div class="col-md-2">
+        {{  filter_form.date_to  }}
+      </div>
+      <div class="col-md-1">
+        <button class="btn bg-gradient-primary">
+          🔎
+        </button>
+      </div>
+      <div class="col-md-1">
+        <a href="{% url 'accounts:myorder-list' %}" class="btn bg-gradient-primary">
+          Reset
+        </a>
+      </div>
+    </form>
   </div>
 
   <div class="container">
@@ -31,6 +62,7 @@
                 <h5 class="text-white">Order: {{ order.id }}</h5>
                 <p class="text-sm">Status: {{ order.status }}</p>
                 <p class="text-sm">Created: {{ order.created_at|date:"Y-m-d H:i" }}</p>
+                <p class="text-sm">Price: {{ order.get_total_price }}</p>
               </div>
             </div>
           </a>

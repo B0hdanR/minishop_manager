@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import generic
 
+from shop.mixins import OrderFilterMixin
 from shop.models import Order
 from .forms import SignUpForm
 from django.contrib.auth import get_user_model
@@ -60,13 +61,14 @@ class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
         return context
 
 
-class MyOrderListView(LoginRequiredMixin, generic.ListView):
+class MyOrderListView(LoginRequiredMixin, OrderFilterMixin, generic.ListView):
     model = Order
     paginate_by = 10
     template_name = "accounts/myorder_list.html"
+    ordering = ["-created_at"]
 
-    def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).order_by("-created_at")
+    def get_base_queryset(self):
+        return super().get_base_queryset().filter(user=self.request.user).order_by("-created_at")
 
 
 class MyOrderDetailView(LoginRequiredMixin, generic.DetailView):

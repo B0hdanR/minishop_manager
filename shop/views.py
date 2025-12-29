@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db import transaction
+from django.db.models import F, Sum, Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
@@ -8,8 +9,9 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 
+from shop.mixins import OrderFilterMixin
 from shop.models import Product, Order, ProductCategory, OrderItem
-from shop.forms import ProductForm, OrderStatusUpdateForm
+from shop.forms import ProductForm, OrderStatusUpdateForm, OrderFilterForm
 
 
 def index(request):
@@ -51,7 +53,7 @@ class ProductDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("shop:product-list")
 
 
-class OrderListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+class OrderListView(LoginRequiredMixin, UserPassesTestMixin, OrderFilterMixin, generic.ListView):
     model = Order
     paginate_by = 10
     ordering = ["-created_at"]

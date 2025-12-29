@@ -17,3 +17,59 @@ class OrderStatusUpdateForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ["status"]
+
+class OrderFilterForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Order ID or user",
+            "class": "form-control",
+        }),
+    )
+    status = forms.ChoiceField(
+        required=False,
+        choices=[("", "Statuses")] + Order.STATUS_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    total_min = forms.DecimalField(
+        required=False,
+        min_value=0,
+        label="Min total",
+        widget=forms.NumberInput(attrs={
+            "class": "form-control",
+            "placeholder": "Min total",
+        }),
+    )
+
+    total_max = forms.DecimalField(
+        required=False,
+        min_value=0,
+        label="Max total",
+        widget=forms.NumberInput(attrs={
+            "class": "form-control",
+            "placeholder": "Max total",
+        }),
+    )
+
+    date_from = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            "type": "date",
+            "class": "form-control",
+        }),
+    )
+
+    date_to = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            "type": "date",
+            "class": "form-control",
+        }),
+    )
+
+    class Meta:
+        model = Order
+        fields = ["status"]
