@@ -6,7 +6,7 @@ from django.views import generic
 
 from shop.mixins import OrderFilterMixin, BackUrlDetailMixin
 from shop.models import Order
-from .forms import SignUpForm, SupportRequestForm
+from .forms import SignUpForm, SupportRequestForm, UserUpdateForm
 from django.contrib.auth import get_user_model
 
 from .models import SupportRequest
@@ -57,6 +57,20 @@ class UserDetailView(LoginRequiredMixin, UserPassesTestMixin, BackUrlDetailMixin
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_employee
+
+
+class AccountUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = "accounts/account_update.html"
+    success_url = reverse_lazy("accounts:profile")
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "The changes were saved successfully.")
+        return super().form_valid(form)
 
 
 class MyOrderListView(LoginRequiredMixin, OrderFilterMixin, generic.ListView):

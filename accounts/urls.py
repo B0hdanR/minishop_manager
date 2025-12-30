@@ -6,7 +6,7 @@ from .views import (
     MyOrderListView,
     ProfileView,
     MyOrderDetailView,
-    UserListView, UserDetailView, SupportCreateView
+    UserListView, UserDetailView, SupportCreateView, AccountUpdateView
 )
 
 urlpatterns = [
@@ -28,6 +28,8 @@ urlpatterns = [
          name='user-list'),
     path('users/<int:pk>/', UserDetailView.as_view(),
          name='user-detail'),
+    path('account/', AccountUpdateView.as_view(),
+         name='account-update'),
 
     path('support/', SupportCreateView.as_view(),
          name='support'),

@@ -88,3 +88,24 @@ class SupportRequestForm(forms.ModelForm):
                 "placeholder": "Content",
             }),
         }
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+        widgets = {
+            'email': forms.EmailInput(attrs={
+                "placeholder": "Email",
+                "class": "form-control"
+            }),
+            'first_name': forms.TextInput(attrs={
+                "placeholder": "First Name",
+                "class": "form-control"
+            }),
+            'last_name': forms.TextInput(attrs={
+                "placeholder": "Last Name",
+                "class": "form-control"
+            }),
+        }
