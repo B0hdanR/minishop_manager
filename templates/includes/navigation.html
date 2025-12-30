@@ -83,10 +83,10 @@
                         {% else %}
                           <a href="{% url 'accounts:profile' %}" class="dropdown-item border-radius-md">My account</a>
                         {% endif %}
-                      <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="dropdown-item border-radius-md">Logout</button>
-                      </form>
+                        <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
+                          {% csrf_token %}
+                          <button type="submit" class="dropdown-item border-radius-md">Logout</button>
+                        </form>
                       {% else %}
                         <a href="{% url 'accounts:login' %}" class="dropdown-item border-radius-md">Sign In</a>
                         <a href="{% url 'accounts:register' %}" class="dropdown-item border-radius-md">Register</a>
