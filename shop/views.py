@@ -34,6 +34,7 @@ def index(request):
 class ProductListView(LoginRequiredMixin, ProductFilterMixin, generic.ListView):
     model = Product
     paginate_by = 10
+    ordering = ["id"]
 
 
 class ProductDetailView(LoginRequiredMixin, BackUrlDetailMixin, generic.DetailView):
@@ -65,7 +66,6 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 
     def test_func(self):
         return self.request.user.is_employee or self.request.user.is_staff
-
 
 
 class OrderListView(LoginRequiredMixin, UserPassesTestMixin, OrderFilterMixin, generic.ListView):
@@ -116,7 +116,7 @@ class ProductCategoryListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = ProductCategory.objects.all()
+        queryset = ProductCategory.objects.all().order_by("id")
         name = self.request.GET.get("name")
         if name:
             queryset = queryset.filter(name__icontains=name)

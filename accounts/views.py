@@ -77,6 +77,7 @@ class MyOrderListView(LoginRequiredMixin, OrderFilterMixin, generic.ListView):
     model = Order
     paginate_by = 10
     template_name = "accounts/myorder_list.html"
+    context_object_name = "myorder_list"
     ordering = ["-created_at"]
 
     def get_base_queryset(self):

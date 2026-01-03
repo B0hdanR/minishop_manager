@@ -60,7 +60,7 @@ class ProductFilterMixin:
     filter_from_class = ProductFilterForm
 
     def get_queryset(self):
-        queryset = Product.objects.select_related("category")
+        queryset = Product.objects.select_related("category").order_by("id")
         form = self.filter_from_class(self.request.GET)
 
         if form.is_valid():
