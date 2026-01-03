@@ -64,21 +64,20 @@
               </div>
               <hr class="vertical dark">
             </div>
+            <div class="col-md-4 position-relative">
+              <div class="p-3 text-center">
+                <a href="{% url 'accounts:myorder-list' %}" class="text-decoration-none">
+                  <h1 class="text-gradient text-primary"><span id="state5" countTo="{{ num_myorders }}">0</span></h1>
+                  <h5 class="mt-3">My orders</h5>
+                </a>
+              </div>
+            </div>
             {% if request.user.is_staff or request.user.is_employee %}
-                <div class="col-md-4 position-relative">
+                <div class="col-md-12 position-relative">
                   <div class="p-3 text-center">
                     <a href="{% url 'shop:order-list' %}" class="text-decoration-none">
                       <h1 class="text-gradient text-primary"><span id="state4" countTo="{{ num_orders }}">0</span></h1>
                       <h5 class="mt-3">Orders</h5>
-                    </a>
-                  </div>
-                </div>
-            {% else %}
-                <div class="col-md-4 position-relative">
-                  <div class="p-3 text-center">
-                    <a href="{% url 'accounts:myorder-list' %}" class="text-decoration-none">
-                      <h1 class="text-gradient text-primary"><span id="state5" countTo="{{ num_myorders }}">0</span></h1>
-                      <h5 class="mt-3">My orders</h5>
                     </a>
                   </div>
                 </div>

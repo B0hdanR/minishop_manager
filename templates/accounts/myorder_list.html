@@ -49,7 +49,7 @@
 
   <div class="container">
     <div class="row">
-      {% for order in order_list %}
+      {% for order in myorder_list %}
         <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
           <a href="{% url 'accounts:myorder-detail' pk=order.id%}" class="text-decoration-none">
             <div class="info-horizontal border-radius-xl p-5" style="background: linear-gradient(135deg, #4a6fa5, #d3d3d3); color: black;">
