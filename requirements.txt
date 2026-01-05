@@ -1,0 +1,4 @@
+Django>=6.0
+django-filter>=23.0
+django-environ>=0.11.2
+gunicorn>=20.1.0
