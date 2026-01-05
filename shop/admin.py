@@ -45,5 +45,11 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ("order", "order__user", "product", "quantity", "order__status")
+    list_display = ("order", "get_order_user", "product", "quantity", "get_order_status")
     list_filter = ("product",)
+
+    def get_order_user(self, obj):
+        return obj.order.user
+
+    def get_order_status(self, obj):
+        return obj.order.status
