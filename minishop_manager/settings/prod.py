@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 
 from .base import *
-
+from .base import BASE_DIR
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -27,3 +27,6 @@ DATABASES = {
         },
     }
 }
+
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'

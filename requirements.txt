@@ -12,3 +12,4 @@ python-dotenv==1.2.1
 self==2020.12.3
 sqlparse==0.5.4
 tzdata==2025.3
+whitenoise==6.11.0
